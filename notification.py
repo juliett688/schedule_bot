@@ -57,7 +57,7 @@ def get_day_info(sheet_id = 0, day = (datetime.today() + timedelta(days=1)+ time
         sheet_column_id = days_column_id[dates.index(day)]
         day = wks.get_values_batch(['B6:B35', sheet_column_id]) # two lists with dates and deals
         result = ''
-        dict_plans = {} # словарь с сообщениями ученикам
+        plans = [] # list с сообщениями ученикам
         info_students = get_contacts_dict()
         for i, case in enumerate(day[1]):
 
@@ -80,9 +80,9 @@ def get_day_info(sheet_id = 0, day = (datetime.today() + timedelta(days=1)+ time
                     continue
 
                 messages = ['◼️'*20+f'\nУрок: {name} \nКонтакт: {contact}\nСообщение ученику:\n'+'◼️'*20, text_message]
-                dict_plans[time] = messages
+                plans.append(messages) 
 
-        return '*'+result+'*', dict_plans
+        return '*'+result+'*', plans
     else:
         return TEXT_ERROR, {}
 

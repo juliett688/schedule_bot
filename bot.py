@@ -22,24 +22,24 @@ def start(message):
 @bot.message_handler(commands=['tomorow'])
 def send_message(message):
     sheet_id = get_sheet_id_with_star(SHEET_WEEK)
-    text, dict_mes = get_day_info(sheet_id)
+    text = get_day_info(sheet_id)[0]
     bot.send_message(CHAT_ID, "Твои планы на завтра:\n\n"+text, parse_mode="Markdown")
 
 @bot.message_handler(commands=['get_notification_for_tomorow'])
 def send_message(message):
     sheet_id = get_sheet_id_with_star(SHEET_WEEK)
-    text, dict_mes = get_day_info(sheet_id)
+    text, list_mes = get_day_info(sheet_id)
     bot.send_message(CHAT_ID, "Твои планы на завтра:\n\n"+text, parse_mode="Markdown")
     if text != TEXT_ERROR:
-        for key in dict_mes:
-            bot.send_message(CHAT_ID, dict_mes[key][0] )#, parse_mode="Markdown")
-            bot.send_message(CHAT_ID, dict_mes[key][1])
+        for mes in list_mes:
+            bot.send_message(CHAT_ID, mes[0] )#, parse_mode="Markdown")
+            bot.send_message(CHAT_ID, mes[1])
 
 
 @bot.message_handler(commands=['today'])
 def send_message(message):
     sheet_id = get_sheet_id_with_star(SHEET_WEEK)
-    text, dict_mes = get_day_info(sheet_id, (datetime.today()+ timedelta(hours=3)).strftime('%d.%m.%Y'))
+    text = get_day_info(sheet_id, (datetime.today()+ timedelta(hours=3)).strftime('%d.%m.%Y'))[0]
     bot.send_message(CHAT_ID, "Твои планы на сегодня:\n\n"+text, parse_mode="Markdown")
 
 
