@@ -11,6 +11,7 @@ def gen_help_markup():
     markup.add(KeyboardButton('/next_deal'))
     markup.add(KeyboardButton('/tomorow'), KeyboardButton('/today'))
     markup.add(KeyboardButton('/get_notification_for_tomorow'))
+    markup.add(KeyboardButton('/get_notification_for_today'))
     return markup
 
 @bot.message_handler(commands=['start'])
@@ -20,24 +21,34 @@ def start(message):
 
 
 @bot.message_handler(commands=['tomorow'])
-def send_message(message):
+def tomorow_handler(message):
     sheet_id = get_sheet_id_with_star(SHEET_WEEK)
     text = get_day_info(sheet_id)[0]
     bot.send_message(CHAT_ID, "Твои планы на завтра:\n\n"+text, parse_mode="Markdown")
 
 @bot.message_handler(commands=['get_notification_for_tomorow'])
-def send_message(message):
+def get_notification_for_tomorow_handler(message):
     sheet_id = get_sheet_id_with_star(SHEET_WEEK)
     text, list_mes = get_day_info(sheet_id)
-    bot.send_message(CHAT_ID, "Твои планы на завтра:\n\n"+text, parse_mode="Markdown")
+    bot.send_message(CHAT_ID, "Твои планы на сегодня:\n\n"+text, parse_mode="Markdown")
     if text != TEXT_ERROR:
         for mes in list_mes:
             bot.send_message(CHAT_ID, mes[0] )#, parse_mode="Markdown")
             bot.send_message(CHAT_ID, mes[1])
 
+@bot.message_handler(commands=['get_notification_for_today'])
+def get_notification_for_today_handler(message):
+    sheet_id = get_sheet_id_with_star(SHEET_WEEK)
+    text, list_mes = get_day_info(sheet_id , today=True)
+    bot.send_message(CHAT_ID, "Твои планы на завтра:\n\n"+text, parse_mode="Markdown")
+    if text != TEXT_ERROR:
+        for mes in list_mes:
+            bot.send_message(CHAT_ID, mes[0] )
+            bot.send_message(CHAT_ID, mes[1])
+
 
 @bot.message_handler(commands=['today'])
-def send_message(message):
+def today_handler(message):
     sheet_id = get_sheet_id_with_star(SHEET_WEEK)
     text = get_day_info(sheet_id, (datetime.today()+ timedelta(hours=3)).strftime('%d.%m.%Y'))[0]
     bot.send_message(CHAT_ID, "Твои планы на сегодня:\n\n"+text, parse_mode="Markdown")
@@ -157,7 +168,7 @@ def send_notification(message):
     #     bot.send_message(CHAT_ID, 'Ближайшие полчаса дел нет')
 
 def shedule_thread():
-    schedule.every().day.at("19:14").do(send_message, message = '')
+    schedule.every().day.at("19:14").do(send_next_deal, message = '')
     schedule.every().day.at("00:01").do(money_0)
     schedule.every().hours.at(":55").do(send_notification, message = '')
     schedule.every().hours.at(":25").do(send_notification, message = '')
@@ -169,9 +180,9 @@ def shedule_thread():
 def polling_thread_def():
     try:
         bot.polling(none_stop=True, timeout=120)
-    except ReadTimeout as e:
-        # Обработка ошибки ReadTimeout
-        bot.send_message(message.chat.id, "Извините, возникла ошибка. Попробуйте позже.")
+    except TimeoutError as e:
+        # Обработка ошибки TimeoutError
+        print("Извините, возникла ошибка. Попробуйте позже.")
         bot.polling(none_stop=True, timeout=120)
 
 
