@@ -14,18 +14,18 @@ import threading
 
 # ----------------------------------------------------------------------
 TOKEN = ''
-CHAT_ID = '887971750'
+CHAT_ID = ''
 # ----------------------------------------------------------------------
 
 
 
 # ----------------------------------------------------------------------
-TEXT_ERROR = 'Кажется, сегодня воскресенье, пора поставить звездочку на новую страницу'
+TEXT_ERROR = 'Кажется, сегодня воскресенье, пора обновить расписание'
 # ----------------------------------------------------------------------
-SHEET_INFO = 'https://docs.google.com/spreadsheets/d/1ennBAXi3vGJmvk8nBkmTqEtwCeNlRhh7pt3axqAmK3s/edit?usp=sharing'
-SHEET_WEEK = 'https://docs.google.com/spreadsheets/d/19UQgj7yZD2BEPuuyAN9Vt7XPoxMkiJND_STV-ojX-ok/edit#gid=736077533'
+SHEET_INFO = ''
+SHEET_WEEK = ''
 # ----------------------------------------------------------------------
-SHEET_MONEY = 'https://docs.google.com/spreadsheets/d/1l29b_E6NR4R3GnW8s8C2aTVZGgRQo4_QF3RY0YMdta0/edit?usp=sharing'
+SHEET_MONEY = ''
 # ----------------------------------------------------------------------
 
 
